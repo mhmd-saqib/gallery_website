@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile</title>
+  <style>
+    body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f5a5c0, #9fd3f0);
+  display: flex;
+  justify-content: center;
+  flex-direction: column; /* still centers horizontally */
+  align-items: flex-start; /* move content to the top */
+  padding-top: 50px; /* space from top */
+  
+}
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+      padding: 30px;
+       margin: 0 auto;
+    }
+
+    .profile-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #f5a5c0;
+      margin-bottom: 15px;
+    }
+
+    .profile-card h1 {
+      font-size: 22px;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .profile-card p {
+      font-size: 14px;
+      color: #555;
+      margin: 5px 0 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background: #f5a5c0;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #e67da6;
+    }
+
+
+   .gallery {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 90%;
+  margin: 20px auto;
+  padding: 10px;
+  display: flex;
+  overflow-x: auto;       /* allows horizontal scroll */
+  gap: 10px;
+  scroll-behavior: smooth;
+
+  /* Hide scrollbar for all browsers */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.gallery::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+
+.gallery img {
+  flex: 0 0 auto;          /* prevent images from shrinking */
+  height: 550px;           /* fixed height */
+  width: auto;             /* width adjusts based on image ratio */
+  object-fit: cover;       /* crops image if needed */
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <img src="https://ik.imagekit.io/player1/pp_47hTvUVMk?updatedAt=1758392083987" alt="Profile Photo">
+    <h1>Saqib</h1>
+    <p>gallery wensite by me</p>
+    <a class="btn" href="https://www.instagram.com/mhmd.saqib/" target="_blank">Instagram</a>
+    <a class="btn" href="https://www.linkedin.com/in/mohd-saqib-3a3991313/" target="_blank">LinkedIn</a>
+  </div>
+
+  <div class="gallery">
+  <img src="https://ik.imagekit.io/player1/IMG-20230704-WA0022.jpg?updatedAt=1758390404329" alt="Image 1">
+  <img src="https://ik.imagekit.io/player1/IMG20240414175222.jpg?updatedAt=1758390445752" alt="Image 2">
+  <img src="https://ik.imagekit.io/player1/IMG20240807102405.jpg?updatedAt=1758390452717" alt="Image 3">
+  <img src="https://ik.imagekit.io/player1/IMG20231018215015.jpg?updatedAt=1758390460627" alt="Image 4">
+  <img src="https://ik.imagekit.io/player1/IMG20240414170928.jpg?updatedAt=1758390462401" alt="Image 5">
+</div>
+</body>
+
+<script>
+const gallery = document.querySelector('.gallery');
+
+gallery.addEventListener('wheel', (e) => {
+  e.preventDefault();          // prevent vertical scrolling
+  gallery.scrollLeft += e.deltaY*5; // scroll horizontally
+});
+</script>
+</html>
