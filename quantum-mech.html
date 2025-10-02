@@ -1,0 +1,138 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyMaths</title> 
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script> 
+          
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;   
+      align-items: center;     
+      justify-content: flex-start; 
+      background: linear-gradient(to bottom, #100c43, #000000);
+      background-attachment: fixed;  
+      background-repeat: no-repeat;   
+      background-size: cover;         
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Question mark icon (top-right corner) */
+    #help-icon {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* Popup box */
+    #popup-box {
+      position: fixed;
+      top: 60px; /* start below the icon */
+      right: 20px;
+      width: 60%;
+      height: calc(100% - 80px); /* leaves bottom margin */
+      background: rgba(20, 20, 40, 0.95);
+      border: 2px solid white;
+      border-radius: 10px;
+      padding: 20px;
+      display: none; /* hidden by default */
+      overflow-y: auto;
+      color: white;
+      z-index: 999;
+    }
+
+    /* Inner content div inside popup */
+    #popup-content {
+      font-size: 1.2rem;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+    }
+
+    .equation-box {
+      background: transparent;
+      border: 2px solid white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      text-align: center;
+      color: white;
+      display: inline-block; 
+      margin: 5px;  
+    }
+
+    .big-box {
+      width: calc(100% - 100px);
+      margin: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background:  #2b2a3e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .formula-name {
+      font-weight: bold;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      margin: 10px 0;
+      letter-spacing: 2px;
+    }
+
+    .class-main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    #title {
+      font-weight: bold;
+      font-size: 2rem;
+      color: rgb(0, 242, 255);
+      font-family: Papyrus,fantasy;
+      text-align: center;
+      margin: 10px 0;
+      letter-spacing: 2px; 
+    }
+  </style>
+</head>
+<body> 
+
+  <div id="help-icon">?</div>
+
+  <p id="title">Quantum Mechanics</p>
+  
+  <div id="main-box" class="class-main"></div>
+
+  <!-- Popup -->
+  <div id="popup-box">
+    <div id="popup-content">
+      <!-- Content from JS will go here -->
+    </div>
+  </div>
+
+  <script src="quantum-mech.js"></script>
+  <script>
+    // Toggle popup
+    const helpIcon = document.getElementById("help-icon");
+    const popupBox = document.getElementById("popup-box");
+
+    helpIcon.addEventListener("click", () => {
+      popupBox.style.display = (popupBox.style.display === "none" || popupBox.style.display === "") 
+        ? "block" 
+        : "none";
+    });
+  </script>
+</body> 
+</html>
