@@ -1,0 +1,71 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maths_Formulas</title> 
+          
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;   
+      align-items: center;     
+      justify-content: flex-start; 
+      background: linear-gradient(to bottom, #100c43, #000000);
+      background-attachment: fixed;  
+      background-repeat: no-repeat;   
+      background-size: cover;         
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    .big-box {
+      width: calc(100% - 100px);
+      margin: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background:  #2b2a3e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer; /* shows hand on hover */
+      transition: background 0.3s;
+    }
+
+    .big-box:hover {
+      background: #3a3955; /* hover effect */
+    }
+
+    .subject-name {
+      font-weight: bold;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      margin: 10px 0;
+      letter-spacing: 2px;
+      font-size: large;
+    }
+
+    #title {
+      font-weight: bold;
+      font-size: 2rem;
+      color: rgb(0, 242, 255);
+      font-family: Papyrus,fantasy;
+      text-align: center;
+      margin: 10px 0;
+      letter-spacing: 2px; 
+    }
+  </style>
+</head>
+<body> 
+
+  <p id="title">Maths Formulas</p>
+
+  <!-- Box clickable via JS -->
+  <div id='quantum-box' class="big-box" onclick="window.location.href='quantum-mech.html'">
+    <div class="subject-name">Quantum Mechanics</div>
+  </div>
+
+</body> 
+</html>
