@@ -92,15 +92,69 @@
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+
+
+.about-box {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+  /* full width with margin */
+  width: 90%;  
+  margin: 20px auto;
+
+  /* text styling */
+  text-align: left;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+  font-size: medium;
+
+  padding: 20px;
+}
+
+
+#maths_home {
+  width: 250px;                 /* square width */
+  height: 250px;                /* square height */
+  border-radius: 20px;          /* rounded corners */
+  background: linear-gradient(to bottom, #100c43, #000000);
+
+  display: flex;                /* flexbox for centering */
+  align-items: center;          /* vertical center */
+  justify-content: center;      /* horizontal center */
+
+  font-weight: bold;
+  font-family: Papyrus, fantasy;
+  font-size: 40px;
+  color: cyan;
+
+  text-align: center;           /* ensure text is centered */
+}
+
+
   </style>
 </head>
 <body>
   <div class="profile-card">
     <img src="https://ik.imagekit.io/player1/pp_47hTvUVMk?updatedAt=1758392083987" alt="Profile Photo">
     <h1>Saqib</h1>
-    <p>Gallery website by me :)</p>
+    <p>Web Tools and Resources by Me</p>
     <a class="btn" href="https://www.instagram.com/mhmd.saqib/" target="_blank">Instagram</a>
     <a class="btn" href="https://www.linkedin.com/in/mohd-saqib-3a3991313/" target="_blank">LinkedIn</a>
+  </div>
+
+
+  <div class="about-box">
+    This is an umbrella home page for all the tools and resources created by me as by-product of me learning web development.
+  </div>
+
+
+  <div class="gallery">
+
+    <div id="maths_home" onclick="window.location.href='maths_home.html';" style="cursor: pointer;">
+  Maths Formulas
+</div>
+
   </div>
 
   <div class="gallery">
