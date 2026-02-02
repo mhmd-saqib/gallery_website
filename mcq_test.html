@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MCQ Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="mcq_test.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>MCQ Test</h1>
+
+  <div id="setup">
+    <select id="classSelect">
+      <option value="">Select Class</option>
+      <option value="6">Class 6</option>
+      <option value="9">Class 9</option>
+    </select>
+
+    <select id="subjectSelect" disabled>
+      <option value="">Select Subject</option>
+    </select>
+
+    <select id="chapterSelect" disabled>
+      <option value="">Select Chapter</option>
+    </select>
+
+    <select id="questionCount" disabled>
+      <option value="">Number of Questions</option>
+      <option value="20">20</option>
+      <option value="40">40</option>
+      <option value="60">60</option>
+      <option value="all">All</option>
+    </select>
+
+    <select id="modeSelect" disabled>
+      <option value="">Answer Mode</option>
+      <option value="instant">Instant Answer</option>
+      <option value="end">Result After Test</option>
+    </select>
+
+    <button id="startBtn" disabled>Start Test</button>
+  </div>
+
+  <div id="test" class="hidden">
+    <div id="timer"></div>
+    <div id="questionBox"></div>
+    <div id="optionsBox"></div>
+    <button id="nextBtn">Next</button>
+  </div>
+
+  <div id="result" class="hidden"></div>
+
+</div>
+
+<script src="mcq_data.js"></script>
+<script src="mcq_test.js"></script>
+</body>
+</html>
