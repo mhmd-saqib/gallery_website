@@ -5,38 +5,38 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 700px;
   margin: auto;
-  padding: 20px;
+  padding: 16px;
 }
 
 h1 {
   text-align: center;
-  color: #444;
 }
 
 select, button {
   width: 100%;
   padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  margin: 8px 0;
   font-size: 16px;
-}
-
-button {
-  background: #c5e1f7;
-  font-weight: bold;
-  border: none;
 }
 
 .hidden {
   display: none;
 }
 
-#timer {
-  text-align: right;
-  font-weight: bold;
+#questionBox {
+  font-size: 18px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+}
+
+#questionImage {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: none;
 }
 
 .option {
@@ -47,11 +47,17 @@ button {
   cursor: pointer;
 }
 
-.option:hover {
-  background: #e0f2f1;
-}
-
 #nextBtn {
   display: none;
   background: #bbdefb;
+}
+
+/* feedback png */
+#feedbackIcon {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  height: 100px;
+  display: none;
+  z-index: 9999;
 }

@@ -1,3 +1,5 @@
+const qs = id => document.getElementById(id);
+
 let questions = [];
 let userAnswers = [];
 let current = 0;
@@ -6,162 +8,146 @@ let mode = "";
 let startTime;
 let timerInterval;
 
-const qs = id => document.getElementById(id);
+const feedbackIcon = qs("feedbackIcon");
 
-const classSelect = qs("classSelect");
-const subjectSelect = qs("subjectSelect");
-const chapterSelect = qs("chapterSelect");
-const questionCount = qs("questionCount");
-const modeSelect = qs("modeSelect");
-const startBtn = qs("startBtn");
+/* ---------- DROPDOWNS ---------- */
 
-/* ---------- DROPDOWN FLOW ---------- */
+qs("classSelect").onchange = e => {
+  const cls = e.target.value;
+  qs("subjectSelect").innerHTML = "<option>Select Subject</option>";
+  qs("subjectSelect").disabled = false;
 
-classSelect.onchange = () => {
-  subjectSelect.innerHTML = "<option value=''>Select Subject</option>";
-  chapterSelect.innerHTML = "<option value=''>Select Chapter</option>";
-
-  subjectSelect.disabled = false;
-  chapterSelect.disabled = true;
-  questionCount.disabled = true;
-  modeSelect.disabled = true;
-  startBtn.disabled = true;
-
-  Object.keys(questionBank[classSelect.value]).forEach(sub => {
-    subjectSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
-  });
+  const data = cls === "6" ? class6Data : class9Data;
+  Object.keys(data).forEach(s =>
+    qs("subjectSelect").innerHTML += `<option>${s}</option>`
+  );
 };
 
-subjectSelect.onchange = () => {
-  chapterSelect.innerHTML = "<option value=''>Select Chapter</option>";
-  chapterSelect.disabled = false;
-  questionCount.disabled = true;
-  modeSelect.disabled = true;
-  startBtn.disabled = true;
+qs("subjectSelect").onchange = e => {
+  qs("chapterSelect").innerHTML = "<option>Select Chapter</option>";
+  qs("chapterSelect").disabled = false;
 
-  Object.keys(
-    questionBank[classSelect.value][subjectSelect.value]
-  ).forEach(ch => {
-    chapterSelect.innerHTML += `<option value="${ch}">${ch}</option>`;
-  });
+  const data = qs("classSelect").value === "6" ? class6Data : class9Data;
+  Object.keys(data[e.target.value]).forEach(c =>
+    qs("chapterSelect").innerHTML += `<option>${c}</option>`
+  );
 };
 
-chapterSelect.onchange = () => {
-  questionCount.disabled = false;
-};
+qs("chapterSelect").onchange = () => qs("questionCount").disabled = false;
+qs("questionCount").onchange = () => qs("modeSelect").disabled = false;
+qs("modeSelect").onchange = () => qs("startBtn").disabled = false;
 
-questionCount.onchange = () => {
-  modeSelect.disabled = false;
-};
+/* ---------- START TEST ---------- */
 
-modeSelect.onchange = () => {
-  startBtn.disabled = false;
-};
-
-/* ---------- TEST START ---------- */
-
-startBtn.onclick = () => {
+qs("startBtn").onclick = () => {
   qs("setup").classList.add("hidden");
   qs("test").classList.remove("hidden");
 
-  mode = modeSelect.value;
+  mode = qs("modeSelect").value;
+  const data = qs("classSelect").value === "6" ? class6Data : class9Data;
 
-  const allQ =
-    questionBank[classSelect.value]
-               [subjectSelect.value]
-               [chapterSelect.value];
+  questions = data
+    [qs("subjectSelect").value]
+    [qs("chapterSelect").value];
 
-  const count =
-    questionCount.value === "all"
-      ? allQ.length
-      : Math.min(parseInt(questionCount.value), allQ.length);
-
-  questions = allQ.sort(() => 0.5 - Math.random()).slice(0, count);
   userAnswers = new Array(questions.length).fill(null);
-  score = 0;
   current = 0;
+  score = 0;
 
   startTime = Date.now();
-  startTimer(count * 30);
+  startTimer();
   showQuestion();
 };
 
-function startTimer(seconds) {
+/* ---------- TIMER (COUNT UP) ---------- */
+
+function startTimer() {
   timerInterval = setInterval(() => {
-    qs("timer").textContent = `Time Left: ${seconds}s`;
-    seconds--;
-    if (seconds < 0) finishTest();
+    const t = Math.floor((Date.now() - startTime) / 1000);
+    qs("timer").textContent = `Time: ${t}s`;
   }, 1000);
 }
 
+/* ---------- QUESTION ---------- */
+
 function showQuestion() {
   const q = questions[current];
-  qs("questionBox").textContent = `Q${current + 1}. ${q.q}`;
+  qs("questionBox").innerHTML = q.q;
+
+  MathJax.typesetPromise();
+
+  if (q.image) {
+    qs("questionImage").src = q.image;
+    qs("questionImage").style.display = "block";
+  } else {
+    qs("questionImage").style.display = "none";
+  }
+
   qs("optionsBox").innerHTML = "";
   qs("nextBtn").style.display = "none";
 
   q.options.forEach((opt, i) => {
-    const div = document.createElement("div");
-    div.className = "option";
-    div.textContent = opt;
-    div.onclick = () => handleAnswer(i);
-    qs("optionsBox").appendChild(div);
+    const d = document.createElement("div");
+    d.className = "option";
+    d.innerHTML = opt;
+    d.onclick = () => answer(i);
+    qs("optionsBox").appendChild(d);
   });
 }
 
-function handleAnswer(index) {
+function answer(i) {
   if (userAnswers[current] !== null) return;
 
-  userAnswers[current] = index;
+  userAnswers[current] = i;
   const correct = questions[current].answer;
-  if (index === correct) score++;
+  if (i === correct) score++;
 
   if (mode === "instant") {
-    const options = document.querySelectorAll(".option");
-    options[correct].style.background = "#c8e6c9";
-    if (index !== correct)
-      options[index].style.background = "#ffcdd2";
-
+    showFeedback(i === correct);
     qs("nextBtn").style.display = "block";
-  } else {
-    nextQuestion();
-  }
+  } else next();
 }
 
-qs("nextBtn").onclick = nextQuestion;
+qs("nextBtn").onclick = next;
 
-function nextQuestion() {
+function next() {
   current++;
-  current < questions.length ? showQuestion() : finishTest();
+  current < questions.length ? showQuestion() : finish();
 }
 
-function finishTest() {
+/* ---------- FEEDBACK PNG ---------- */
+
+function showFeedback(ok) {
+  feedbackIcon.src = ok ? "correct.png" : "wrong.png";
+  feedbackIcon.style.display = "block";
+  setTimeout(() => feedbackIcon.style.display = "none", 500);
+}
+
+/* ---------- RESULT ---------- */
+
+function finish() {
   clearInterval(timerInterval);
   qs("test").classList.add("hidden");
 
-  const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-  const result = qs("result");
-  result.classList.remove("hidden");
-
+  const time = Math.floor((Date.now() - startTime) / 1000);
   let html = `<h2>Score: ${score}/${questions.length}</h2>
-              <p>Time Taken: ${timeTaken}s</p><hr>`;
+              <p>Time Taken: ${time}s</p><hr>`;
 
   questions.forEach((q, i) => {
-    const user = userAnswers[i];
-    const correct = q.answer;
-
-    html += `
-      <div style="margin-bottom:12px;">
-        <b>Q${i + 1}. ${q.q}</b><br>
-        Your Answer:
-        <span style="color:${user === correct ? 'green' : 'red'}">
-          ${user !== null ? q.options[user] : "Not Answered"}
-        </span><br>
-        Correct Answer:
-        <span style="color:green">${q.options[correct]}</span>
-      </div>
-    `;
+    html += `<p>
+      <b>Q${i + 1}.</b> ${q.q}<br>
+      Your: <span style="color:${userAnswers[i] === q.answer ? 'green':'red'}">
+        ${userAnswers[i] !== null ? q.options[userAnswers[i]] : "Not Answered"}
+      </span><br>
+      Correct: <span style="color:green">${q.options[q.answer]}</span>
+    </p>`;
   });
 
-  result.innerHTML = html;
+  const resultDiv = qs("result");
+  resultDiv.innerHTML = html;
+  resultDiv.classList.remove("hidden");
+
+  /*  THIS LINE FIXES LaTeX IN RESULT VIEW  */
+  MathJax.typesetPromise();
 }
+

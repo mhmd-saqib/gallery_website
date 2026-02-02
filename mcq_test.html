@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <title>MCQ Test</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="mcq_test.css">
+
+  <!-- MathJax for LaTeX -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(','\\)']] } };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
+
+<img id="feedbackIcon" />
 
 <div class="container">
 
@@ -20,14 +29,8 @@
       <option value="9">Class 9</option>
     </select>
 
-    <select id="subjectSelect" disabled>
-      <option value="">Select Subject</option>
-    </select>
-
-    <select id="chapterSelect" disabled>
-      <option value="">Select Chapter</option>
-    </select>
-
+    <select id="subjectSelect" disabled></select>
+    <select id="chapterSelect" disabled></select>
     <select id="questionCount" disabled>
       <option value="">Number of Questions</option>
       <option value="20">20</option>
@@ -46,8 +49,11 @@
   </div>
 
   <div id="test" class="hidden">
-    <div id="timer"></div>
+    <div id="timer">Time: 0s</div>
+
     <div id="questionBox"></div>
+    <img id="questionImage" />
+
     <div id="optionsBox"></div>
     <button id="nextBtn">Next</button>
   </div>
@@ -56,7 +62,8 @@
 
 </div>
 
-<script src="mcq_data.js"></script>
+<script src="mcq_data_class6.js"></script>
+<script src="mcq_data_class9.js"></script>
 <script src="mcq_test.js"></script>
 </body>
 </html>
