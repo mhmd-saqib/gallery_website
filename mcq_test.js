@@ -72,10 +72,11 @@ function startTimer() {
 
 function showQuestion() {
   const q = questions[current];
+
+  // Question text (LaTeX supported)
   qs("questionBox").innerHTML = q.q;
 
-  MathJax.typesetPromise();
-
+  // Image handling (unchanged)
   if (q.image) {
     qs("questionImage").src = q.image;
     qs("questionImage").style.display = "block";
@@ -83,9 +84,11 @@ function showQuestion() {
     qs("questionImage").style.display = "none";
   }
 
+  // Clear old options
   qs("optionsBox").innerHTML = "";
   qs("nextBtn").style.display = "none";
 
+  // Insert options (LaTeX supported)
   q.options.forEach((opt, i) => {
     const d = document.createElement("div");
     d.className = "option";
@@ -93,7 +96,12 @@ function showQuestion() {
     d.onclick = () => answer(i);
     qs("optionsBox").appendChild(d);
   });
+
+  //  THIS IS THE IMPORTANT LINE 
+  // Renders LaTeX in BOTH question AND options
+  MathJax.typesetPromise();
 }
+
 
 function answer(i) {
   if (userAnswers[current] !== null) return;
@@ -130,24 +138,49 @@ function finish() {
   qs("test").classList.add("hidden");
 
   const time = Math.floor((Date.now() - startTime) / 1000);
-  let html = `<h2>Score: ${score}/${questions.length}</h2>
-              <p>Time Taken: ${time}s</p><hr>`;
+
+  let html = `
+    <h2>Score: ${score}/${questions.length}</h2>
+    <p>Time Taken: ${time}s</p>
+
+    <button id="restartBtn" style="
+      width:100%;
+      padding:12px;
+      margin:15px 0;
+      font-size:16px;
+      background:#c5e1f7;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    ">
+      Start New Test
+    </button>
+
+    <hr>
+  `;
 
   questions.forEach((q, i) => {
-    html += `<p>
-      <b>Q${i + 1}.</b> ${q.q}<br>
-      Your: <span style="color:${userAnswers[i] === q.answer ? 'green':'red'}">
-        ${userAnswers[i] !== null ? q.options[userAnswers[i]] : "Not Answered"}
-      </span><br>
-      Correct: <span style="color:green">${q.options[q.answer]}</span>
-    </p>`;
+    html += `
+      <p>
+        <b>Q${i + 1}.</b> ${q.q}<br>
+        Your: <span style="color:${userAnswers[i] === q.answer ? 'green' : 'red'}">
+          ${userAnswers[i] !== null ? q.options[userAnswers[i]] : "Not Answered"}
+        </span><br>
+        Correct: <span style="color:green">${q.options[q.answer]}</span>
+      </p>
+    `;
   });
 
   const resultDiv = qs("result");
   resultDiv.innerHTML = html;
   resultDiv.classList.remove("hidden");
 
-  /*  THIS LINE FIXES LaTeX IN RESULT VIEW  */
+  // Enable LaTeX in result view
   MathJax.typesetPromise();
+
+  // 🔁 Restart button logic
+  document.getElementById("restartBtn").onclick = () => {
+    window.location.href = "mcq_test.html";
+  };
 }
 
