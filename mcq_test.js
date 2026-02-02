@@ -44,17 +44,22 @@ qs("startBtn").onclick = () => {
   qs("test").classList.remove("hidden");
 
   mode = qs("modeSelect").value;
+
   const data = qs("classSelect").value === "6" ? class6Data : class9Data;
+  const allQ = data[qs("subjectSelect").value][qs("chapterSelect").value];
 
-  questions = data
-    [qs("subjectSelect").value]
-    [qs("chapterSelect").value];
+  const count =
+    qs("questionCount").value === "all"
+      ? allQ.length
+      : Math.min(parseInt(qs("questionCount").value), allQ.length);
 
+  questions = allQ.sort(() => 0.5 - Math.random()).slice(0, count);
   userAnswers = new Array(questions.length).fill(null);
+
   current = 0;
   score = 0;
-
   startTime = Date.now();
+
   startTimer();
   showQuestion();
 };
@@ -73,10 +78,8 @@ function startTimer() {
 function showQuestion() {
   const q = questions[current];
 
-  // Question text (LaTeX supported)
   qs("questionBox").innerHTML = q.q;
 
-  // Image handling (unchanged)
   if (q.image) {
     qs("questionImage").src = q.image;
     qs("questionImage").style.display = "block";
@@ -84,39 +87,51 @@ function showQuestion() {
     qs("questionImage").style.display = "none";
   }
 
-  // Clear old options
   qs("optionsBox").innerHTML = "";
-  qs("nextBtn").style.display = "none";
+  qs("nextBtn").style.display = mode === "end" ? "block" : "none";
 
-  // Insert options (LaTeX supported)
   q.options.forEach((opt, i) => {
     const d = document.createElement("div");
     d.className = "option";
     d.innerHTML = opt;
-    d.onclick = () => answer(i);
+    d.onclick = () => answer(i, d);
     qs("optionsBox").appendChild(d);
   });
 
-  //  THIS IS THE IMPORTANT LINE 
-  // Renders LaTeX in BOTH question AND options
   MathJax.typesetPromise();
 }
 
+/* ---------- ANSWER HANDLING ---------- */
 
-function answer(i) {
+function answer(index, element) {
   if (userAnswers[current] !== null) return;
 
-  userAnswers[current] = i;
+  userAnswers[current] = index;
   const correct = questions[current].answer;
-  if (i === correct) score++;
+  const options = document.querySelectorAll(".option");
 
   if (mode === "instant") {
-    showFeedback(i === correct);
-    qs("nextBtn").style.display = "block";
-  } else next();
+    if (index === correct) {
+      element.classList.add("correct");
+      score++;
+      showFeedback(true);
+    } else {
+      element.classList.add("wrong");
+      options[correct].classList.add("correct");
+      showFeedback(false);
+    }
+
+    setTimeout(next, 1000);
+
+  } else {
+    element.classList.add("selected");
+    if (index === correct) score++;
+  }
 }
 
 qs("nextBtn").onclick = next;
+
+/* ---------- NAVIGATION ---------- */
 
 function next() {
   current++;
@@ -138,7 +153,6 @@ function finish() {
   qs("test").classList.add("hidden");
 
   const time = Math.floor((Date.now() - startTime) / 1000);
-
   let html = `
     <h2>Score: ${score}/${questions.length}</h2>
     <p>Time Taken: ${time}s</p>
@@ -151,7 +165,6 @@ function finish() {
       background:#c5e1f7;
       border:none;
       border-radius:8px;
-      cursor:pointer;
     ">
       Start New Test
     </button>
@@ -164,23 +177,19 @@ function finish() {
       <p>
         <b>Q${i + 1}.</b> ${q.q}<br>
         Your: <span style="color:${userAnswers[i] === q.answer ? 'green' : 'red'}">
-          ${userAnswers[i] !== null ? q.options[userAnswers[i]] : "Not Answered"}
+          ${q.options[userAnswers[i]] || "Not Answered"}
         </span><br>
         Correct: <span style="color:green">${q.options[q.answer]}</span>
       </p>
     `;
   });
 
-  const resultDiv = qs("result");
-  resultDiv.innerHTML = html;
-  resultDiv.classList.remove("hidden");
+  qs("result").innerHTML = html;
+  qs("result").classList.remove("hidden");
 
-  // Enable LaTeX in result view
   MathJax.typesetPromise();
 
-  // 🔁 Restart button logic
-  document.getElementById("restartBtn").onclick = () => {
+  qs("restartBtn").onclick = () => {
     window.location.href = "mcq_test.html";
   };
 }
-

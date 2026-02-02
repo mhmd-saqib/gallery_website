@@ -61,3 +61,29 @@ select, button {
   display: none;
   z-index: 9999;
 }
+
+/* Selected option (end mode) */
+.option.selected {
+  background: #bbdefb;
+}
+
+/* Instant feedback */
+.option.correct {
+  background: #c8e6c9;
+}
+
+.option.wrong {
+  background: #ffcdd2;
+}
+
+/* Centered feedback PNG */
+#feedbackIcon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
+  display: none;
+  z-index: 9999;
+  pointer-events: none;
+}
